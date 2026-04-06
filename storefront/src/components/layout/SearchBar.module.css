@@ -1,0 +1,136 @@
+.wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  background: var(--color-surface-container-highest);
+  border-radius: var(--radius-xl);
+  padding: var(--space-sm) var(--space-md);
+  gap: var(--space-sm);
+}
+
+.searchIcon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: var(--text-body-md);
+  color: var(--color-on-background);
+  min-width: 0;
+}
+
+.input::placeholder {
+  color: var(--color-on-surface-variant);
+}
+
+.clearBtn {
+  font-size: 0.75rem;
+  color: var(--color-on-surface-variant);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--color-surface-container-lowest);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  max-height: 360px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.dropdown::-webkit-scrollbar { display: none; }
+
+.loadingText,
+.emptyText {
+  font: var(--text-body-md);
+  color: var(--color-on-surface-variant);
+  padding: var(--space-md);
+  margin: 0;
+  text-align: center;
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  transition: background var(--duration-fast);
+}
+
+.resultItem:hover {
+  background: var(--color-surface-container-low);
+}
+
+.resultImage {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-container-low);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img {
+  object-fit: cover;
+}
+
+.resultInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.resultName {
+  font: var(--text-label-md);
+  color: var(--color-on-background);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resultPrice {
+  font: var(--text-body-sm);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.addBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: background var(--duration-fast);
+}
+
+.addBtn:disabled {
+  background: var(--color-surface-container-highest);
+  color: var(--color-on-surface-variant);
+}

@@ -1,0 +1,29 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.title {
+  font: var(--text-headline-md);
+  color: var(--color-on-background);
+  margin: 0;
+}
+
+.scrollContainer {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: var(--space-xs);
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.cardWrap {
+  flex-shrink: 0;
+  width: 160px;
+}

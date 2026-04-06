@@ -1,0 +1,65 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.btn {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--gradient-primary);
+  color: var(--color-on-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font: var(--text-label-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  transition: transform var(--duration-fast) var(--ease-out-expo),
+              box-shadow var(--duration-fast),
+              opacity var(--duration-fast);
+  min-height: 56px;
+}
+
+.btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.total {
+  opacity: 0.85;
+}
+
+.minOrderWarning {
+  font: var(--text-label-sm);
+  color: var(--color-error);
+  margin: 0;
+  text-align: center;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-error-container);
+  border-radius: var(--radius-sm);
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,36 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-md) 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.back {
+  font: var(--text-label-md);
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.title {
+  font: var(--text-headline-lg);
+  color: var(--color-on-background);
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.loadMore {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-md) 0;
+}

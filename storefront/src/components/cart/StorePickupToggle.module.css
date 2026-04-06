@@ -1,0 +1,59 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.toggle {
+  display: flex;
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-md);
+  padding: var(--space-xs);
+  gap: var(--space-xs);
+}
+
+.btn {
+  flex: 1;
+  padding: var(--space-sm);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  font: var(--text-label-md);
+  color: var(--color-on-surface-variant);
+  transition: all var(--duration-fast);
+}
+
+.btnActive {
+  background: var(--color-surface-container-lowest);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.info {
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.storeName {
+  font: var(--text-label-lg);
+  color: var(--color-on-background);
+  margin: 0;
+}
+
+.storeAddress,
+.storeHours,
+.readyTime {
+  font: var(--text-body-sm);
+  color: var(--color-on-surface-variant);
+  margin: 0;
+}
+
+.readyTime {
+  color: var(--color-primary);
+  font-weight: 600;
+}

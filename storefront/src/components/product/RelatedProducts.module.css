@@ -1,0 +1,25 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.title {
+  font: var(--text-headline-md);
+  color: var(--color-on-background);
+  margin: 0;
+}
+
+.scroll {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.scroll::-webkit-scrollbar { display: none; }
+
+.cardWrap {
+  flex-shrink: 0;
+  width: 160px;
+}

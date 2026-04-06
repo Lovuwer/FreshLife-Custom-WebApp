@@ -1,0 +1,60 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: var(--glass-border);
+  height: var(--header-height);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0 var(--space-md);
+  height: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.locationIcon {
+  font-size: 1rem;
+}
+
+.locationText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.locationHelper {
+  font: var(--text-label-sm);
+  color: var(--color-on-surface-variant);
+  line-height: 1;
+}
+
+.locationLabel {
+  font: var(--text-label-md);
+  color: var(--color-on-background);
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.searchWrap {
+  flex: 1;
+}

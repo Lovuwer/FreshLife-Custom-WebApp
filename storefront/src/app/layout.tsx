@@ -1,21 +1,38 @@
-import type { Metadata } from "next";
-import { Providers } from "@/lib/providers";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
+import { Providers } from '@/lib/providers';
+import { Header } from '@/components/layout/Header';
+import { BottomNav } from '@/components/layout/BottomNav';
+import { FloatingCart } from '@/components/layout/FloatingCart';
+import { ToastContainer } from '@/components/ui/ToastContainer';
 
 export const metadata: Metadata = {
-  title: "FreshLife — Fresh Groceries Delivered",
-  description: "Order fresh groceries online with express delivery from FreshLife.",
+  title: 'FreshLife — Fresh Groceries Delivered',
+  description: 'Order fresh groceries online with fast delivery. AI-powered Magic List.',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          <main
+            style={{
+              minHeight: '100dvh',
+              paddingTop: 'var(--header-height)',
+              paddingBottom: 'calc(var(--bottom-nav-height) + var(--floating-cart-height) + var(--space-md))',
+              maxWidth: 'var(--max-content-width)',
+              margin: '0 auto',
+              padding: 'var(--header-height) var(--space-md) calc(var(--bottom-nav-height) + var(--floating-cart-height) + var(--space-md))',
+            }}
+          >
+            {children}
+          </main>
+          <FloatingCart />
+          <BottomNav />
+          <ToastContainer />
+        </Providers>
       </body>
     </html>
   );

@@ -9,6 +9,7 @@ interface QuantitySelectorProps {
   onDecrement: () => void;
   max?: number;
   compact?: boolean;
+  disabled?: boolean;
 }
 
 export function QuantitySelector({
@@ -17,6 +18,7 @@ export function QuantitySelector({
   onDecrement,
   max = 99,
   compact = false,
+  disabled = false,
 }: QuantitySelectorProps) {
   const wrapper = compact ? styles.compact : undefined;
 

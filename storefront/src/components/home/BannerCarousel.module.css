@@ -1,0 +1,44 @@
+.carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface-container-low);
+  cursor: pointer;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.dots {
+  position: absolute;
+  bottom: var(--space-sm);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.dotActive {
+  width: 18px;
+  background: #fff;
+}
