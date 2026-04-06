@@ -42,3 +42,10 @@
   flex-direction: column;
   gap: var(--space-sm);
 }
+
+.error {
+  font: var(--text-body-md);
+  color: var(--color-error);
+  text-align: center;
+  padding: var(--space-sm);
+}

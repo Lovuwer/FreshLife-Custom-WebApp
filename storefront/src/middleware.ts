@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const protectedPaths = ['/magic-list', '/cart', '/account'];
+const protectedPaths = ['/magic-list', '/cart', '/account', '/checkout'];
 
 function isProtected(pathname: string): boolean {
   return protectedPaths.some(
