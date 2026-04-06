@@ -21,7 +21,7 @@ export function Badge({
 
   const inlineStyle =
     variant === 'custom' && color
-      ? { color, background: `${color}1a` }
+      ? { color, backgroundColor: `color-mix(in srgb, ${color} 12%, transparent)` }
       : undefined;
 
   return (

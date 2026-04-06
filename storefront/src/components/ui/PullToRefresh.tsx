@@ -20,10 +20,11 @@ export function PullToRefresh({ onRefresh, children }: PullToRefreshProps) {
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
       if (refreshing) return;
-      const scrollTop =
-        wrapperRef.current?.scrollTop ??
-        document.documentElement.scrollTop ??
-        0;
+      // Check wrapper scroll first; fall back to page scroll for non-scrollable wrappers
+      const el = wrapperRef.current;
+      const scrollTop = el
+        ? el.scrollTop
+        : (document.documentElement.scrollTop || document.body.scrollTop);
       if (scrollTop <= 0) {
         startY.current = e.touches[0].clientY;
         pulling.current = true;
