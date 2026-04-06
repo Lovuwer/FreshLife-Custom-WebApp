@@ -1,0 +1,74 @@
+/* Modal — Glassmorphism overlay */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-lg);
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+/* --- Sizes --- */
+
+.sm {
+  max-width: 320px;
+}
+
+.md {
+  max-width: 420px;
+}
+
+.lg {
+  max-width: 540px;
+}
+
+/* --- Header --- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.title {
+  font: var(--text-headline-md);
+  color: var(--color-on-surface);
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container);
+  color: var(--color-on-surface-variant);
+  font-size: 1.125rem;
+  cursor: pointer;
+  transition: background var(--duration-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.closeButton:hover {
+  background: var(--color-surface-container-high);
+}

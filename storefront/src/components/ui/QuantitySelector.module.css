@@ -1,0 +1,102 @@
+/* QuantitySelector — Pill-shaped +/- control */
+
+.addButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--gradient-primary);
+  color: var(--color-on-primary);
+  font: var(--text-label-lg);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  min-height: 36px;
+  transition:
+    transform var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo);
+  box-shadow: var(--shadow-sm);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.addButton:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.addButton:active {
+  transform: translateY(0);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  background: var(--color-secondary-container);
+  border-radius: var(--radius-full);
+  min-height: 36px;
+  overflow: hidden;
+}
+
+.stepButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--duration-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.stepButton:hover:not(:disabled) {
+  background: rgba(0, 106, 45, 0.1);
+}
+
+.stepButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.count {
+  min-width: 28px;
+  text-align: center;
+  font: var(--text-label-lg);
+  color: var(--color-on-background);
+  position: relative;
+  overflow: hidden;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Compact variant (for product cards) --- */
+
+.compact .pill,
+.compact .addButton {
+  min-height: 30px;
+}
+
+.compact .stepButton {
+  width: 30px;
+  height: 30px;
+  font-size: 0.95rem;
+}
+
+.compact .addButton {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.75rem;
+}
+
+.compact .count {
+  min-width: 22px;
+  font-size: 0.75rem;
+  height: 16px;
+}
