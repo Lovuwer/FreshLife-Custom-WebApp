@@ -15,6 +15,8 @@
   --color-tertiary: #006573;
   --color-surface: #f8faf5;
   --color-surface-dim: #eef1e8;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f5ec;
   --color-surface-container: #e8ebe2;
   --color-surface-container-high: #e2e5dc;
   --color-surface-container-highest: #dcdfd7;
