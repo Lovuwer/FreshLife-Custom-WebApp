@@ -567,7 +567,7 @@ FROM frappe/bench:latest
 RUN bench init --frappe-branch version-15 frappe-bench \
   && cd frappe-bench \
   && bench get-app erpnext --branch version-15 \
-  && bench get-app freshlife https://github.com/your-org/freshlife.git --resolve-deps
+  && bench get-app freshlife https://github.com/your-org/freshlife.git
 
 # Install Supervisor for multi-process in single container
 RUN pip install supervisor
