@@ -1,0 +1,55 @@
+.section {
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md);
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: var(--text-label-lg);
+  color: var(--color-on-background);
+}
+
+.arrow {
+  font-size: 1.25rem;
+  transition: transform var(--duration-fast);
+  display: inline-block;
+}
+
+.arrowOpen {
+  transform: rotate(90deg);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--color-surface-container-highest);
+  border-top: 1px solid var(--color-surface-container-highest);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--color-surface-container-low);
+  padding: var(--space-sm);
+}
+
+.cellLabel {
+  font: var(--text-label-sm);
+  color: var(--color-on-surface-variant);
+}
+
+.cellValue {
+  font: var(--text-label-lg);
+  color: var(--color-on-background);
+}

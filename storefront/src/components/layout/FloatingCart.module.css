@@ -1,0 +1,32 @@
+.bar {
+  position: fixed;
+  bottom: calc(var(--bottom-nav-height) + var(--space-sm));
+  left: var(--space-md);
+  right: var(--space-md);
+  max-width: calc(var(--max-content-width) - var(--space-xl));
+  margin: 0 auto;
+  z-index: var(--z-floating-cart);
+  background: var(--gradient-primary);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  min-height: var(--floating-cart-height);
+}
+
+.count {
+  font: var(--text-label-md);
+}
+
+.total {
+  font: var(--text-label-lg);
+}
+
+.cta {
+  font: var(--text-label-md);
+  opacity: 0.9;
+}

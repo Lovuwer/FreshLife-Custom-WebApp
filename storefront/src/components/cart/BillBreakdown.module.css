@@ -1,0 +1,68 @@
+.section {
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.heading {
+  font: var(--text-label-lg);
+  color: var(--color-on-background);
+  margin: 0 0 var(--space-xs);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  font: var(--text-body-md);
+  color: var(--color-on-surface-variant);
+}
+
+.value {
+  font: var(--text-body-md);
+  color: var(--color-on-background);
+}
+
+.discount {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.total {
+  border-top: 1px solid var(--color-surface-container-highest);
+  padding-top: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.totalLabel {
+  font: var(--text-label-lg);
+  color: var(--color-on-background);
+}
+
+.totalValue {
+  font: var(--text-headline-sm);
+  color: var(--color-on-background);
+}
+
+.savings {
+  font: var(--text-label-md);
+  color: var(--color-success);
+  margin: 0;
+  text-align: center;
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+}
+
+.minOrder {
+  font: var(--text-label-sm);
+  color: var(--color-error);
+  margin: 0;
+  text-align: center;
+}

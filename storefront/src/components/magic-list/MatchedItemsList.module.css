@@ -1,0 +1,87 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.heading {
+  font: var(--text-label-lg);
+  color: var(--color-success);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.item {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  box-shadow: var(--shadow-sm);
+}
+
+.matchInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.extracted {
+  font: var(--text-body-sm);
+  color: var(--color-on-surface-variant);
+}
+
+.arrow {
+  color: var(--color-primary);
+}
+
+.product {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.productImage {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-container);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img {
+  object-fit: cover;
+}
+
+.placeholder {
+  font-size: 1rem;
+}
+
+.productInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.productName {
+  font: var(--text-label-md);
+  color: var(--color-on-surface);
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.productPrice {
+  font: var(--text-body-sm);
+  color: var(--color-primary);
+}

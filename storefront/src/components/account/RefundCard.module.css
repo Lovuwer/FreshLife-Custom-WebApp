@@ -1,0 +1,47 @@
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.orderId {
+  font: var(--text-label-lg);
+  color: var(--color-on-surface);
+}
+
+.date {
+  font: var(--text-body-sm);
+  color: var(--color-on-surface-variant);
+  margin-top: 2px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.detailLabel {
+  font: var(--text-body-sm);
+  color: var(--color-on-surface-variant);
+}
+
+.detailValue {
+  font: var(--text-label-md);
+  color: var(--color-on-surface);
+}

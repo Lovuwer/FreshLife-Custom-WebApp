@@ -1,0 +1,37 @@
+/* Badge — Small label badge */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-full);
+  font: var(--text-label-sm);
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+/* --- Variants --- */
+
+.success {
+  background: rgba(0, 106, 45, 0.12);
+  color: var(--color-success);
+}
+
+.error {
+  background: var(--color-error-container);
+  color: var(--color-error);
+}
+
+.warning {
+  background: var(--color-warning-container);
+  color: var(--color-warning);
+}
+
+.info {
+  background: var(--color-secondary-container);
+  color: var(--color-secondary);
+}
+
+.custom {
+  /* color & background set inline */
+}

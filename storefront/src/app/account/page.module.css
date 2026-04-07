@@ -1,0 +1,107 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-md) 0;
+}
+
+.profileCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background: var(--color-surface-container-lowest);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: var(--color-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 1.5rem/1 var(--font-display);
+  flex-shrink: 0;
+}
+
+.name {
+  font: var(--text-headline-sm);
+  color: var(--color-on-background);
+  margin: 0;
+}
+
+.phone {
+  font: var(--text-body-md);
+  color: var(--color-on-surface-variant);
+  margin: var(--space-xs) 0 0;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-container-lowest);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-surface-container-low);
+  transition: background var(--duration-fast);
+}
+
+.menuItem:last-child {
+  border-bottom: none;
+}
+
+.menuItem:hover {
+  background: var(--color-surface-container-low);
+}
+
+.menuIcon {
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+.menuLabel {
+  flex: 1;
+  font: var(--text-body-md);
+  color: var(--color-on-background);
+}
+
+.menuArrow {
+  font-size: 1.25rem;
+  color: var(--color-on-surface-variant);
+}
+
+.logoutBtn {
+  background: var(--color-surface-container-lowest);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  font: var(--text-body-md);
+  color: var(--color-error);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background var(--duration-fast);
+}
+
+.logoutBtn:hover {
+  background: var(--color-error-container);
+}
+
+@media (min-width: 768px) {
+  .page {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,17 @@
+.priceBlock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.price {
+  font: var(--text-display-sm);
+  color: var(--color-on-background);
+}
+
+.mrp {
+  font: var(--text-body-lg);
+  color: var(--color-on-surface-variant);
+  text-decoration: line-through;
+}

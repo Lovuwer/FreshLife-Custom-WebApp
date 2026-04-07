@@ -1,0 +1,100 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.heading {
+  font: var(--text-label-lg);
+  color: var(--color-on-background);
+  margin: 0;
+}
+
+.expressSlot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary-container);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--duration-fast);
+}
+
+.expressSlot:hover {
+  background: color-mix(in srgb, var(--color-primary-container) 80%, var(--color-primary) 20%);
+}
+
+.expressLabel {
+  font: var(--text-label-md);
+  color: var(--color-on-background);
+}
+
+.dateTabs {
+  display: flex;
+  gap: var(--space-xs);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.dateTabs::-webkit-scrollbar { display: none; }
+
+.dateTab {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-container-low);
+  border: none;
+  cursor: pointer;
+  font: var(--text-label-md);
+  color: var(--color-on-surface-variant);
+  white-space: nowrap;
+  transition: all var(--duration-fast);
+  flex-shrink: 0;
+}
+
+.dateTabActive {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.slotsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.slot:hover:not(.slotUnavailable) {
+  background: var(--color-secondary-container);
+}
+
+.slotSelected {
+  background: var(--color-secondary-container) !important;
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.slotUnavailable {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.slotTime {
+  font: var(--text-label-md);
+  color: var(--color-on-background);
+}
+
+.slotFee {
+  font: var(--text-body-sm);
+  color: var(--color-primary);
+  font-weight: 600;
+}

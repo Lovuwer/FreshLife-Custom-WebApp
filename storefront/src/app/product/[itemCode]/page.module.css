@@ -1,0 +1,86 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.back {
+  display: inline-block;
+  padding: var(--space-sm) 0;
+  font: var(--text-label-md);
+  color: var(--color-primary);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: 0 var(--space-xs);
+}
+
+.name {
+  font: var(--text-display-sm);
+  color: var(--color-on-background);
+  margin: 0;
+}
+
+.brand {
+  font: var(--text-body-md);
+  color: var(--color-on-surface-variant);
+  margin: var(--space-xs) 0 0;
+}
+
+.unit {
+  font: var(--text-body-sm);
+  color: var(--color-on-surface-variant);
+  margin: var(--space-xs) 0 0;
+}
+
+.addToCart {
+  margin-top: var(--space-xs);
+}
+
+.qtyWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.sectionTitle {
+  font: var(--text-label-lg);
+  color: var(--color-on-background);
+  margin: 0;
+}
+
+.descText {
+  font: var(--text-body-md);
+  color: var(--color-on-surface-variant);
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .page {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-xl);
+  }
+
+  .back {
+    width: 100%;
+  }
+
+  .info {
+    flex: 1;
+    min-width: 280px;
+  }
+}
