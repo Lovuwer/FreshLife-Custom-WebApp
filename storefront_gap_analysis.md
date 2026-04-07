@@ -1166,6 +1166,471 @@ Work through items in this order to preserve functional dependencies:
 
 ---
 
+## 9. Documentation
+
+The storefront has no developer-facing documentation beyond the default Next.js boilerplate `README.md`.
+The items below cover every documentation artifact that should exist alongside the code, ordered from most critical to nice-to-have.
+
+---
+
+### 9.1 Storefront `README.md` (replace boilerplate)
+
+**Current state:** `storefront/README.md` contains only the default `create-next-app` boilerplate.
+**Required state:** Project-specific README that lets a new developer go from zero to running in under 10 minutes.
+
+**Sections to include:**
+
+```markdown
+# FreshLife Storefront
+
+Next.js 16 (App Router) storefront for the FreshLife omnichannel supermarket app.
+Swiggy Instamart feature parity + AI Magic List.
+
+## Tech stack
+- **Framework:** Next.js 16 (App Router)
+- **UI:** React 19 + CSS Modules (Organic Brutalism design system)
+- **State:** Zustand 5 (cart, auth, location, UI) + TanStack Query 5 (server state)
+- **Payments:** Razorpay Standard Checkout
+- **AI:** Google Gemini (Magic List text + image analysis)
+- **Maps:** Google Maps JS API (address autocomplete + pin-drop)
+- **Auth:** Phone + OTP via MSG91 → HTTP-only cookie `freshlife_auth`
+
+## Prerequisites
+- Node.js 20 LTS
+- A running ERPNext v15/v16 instance with the `freshlife` custom app installed
+- API keys: Razorpay, Google Gemini, Google Maps, MSG91
+
+## Getting started
+
+\`\`\`bash
+cp .env.local.example .env.local
+# Fill in all values in .env.local
+
+npm install
+npm run dev          # http://localhost:3000
+\`\`\`
+
+## Available commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server with Turbopack |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | ESLint check |
+| `npx tsc --noEmit` | TypeScript type-check |
+
+## Project structure
+
+\`\`\`
+src/
+├── app/           # Next.js App Router pages + API routes (BFF)
+├── components/    # React components (layout / home / product / cart / auth / magic-list / account / ui)
+├── lib/
+│   ├── api/       # ERPNext fetch wrappers (server-side only)
+│   ├── hooks/     # TanStack Query + custom hooks
+│   ├── stores/    # Zustand stores (cart, auth, location, ui)
+│   ├── types/     # Shared TypeScript types
+│   └── utils/     # Pure utility functions
+└── middleware.ts  # Route protection (auth guard)
+\`\`\`
+
+## Architecture
+
+All ERPNext calls are made server-side through Next.js Route Handlers (`src/app/api/**`).
+The client never touches ERPNext directly — only `/api/*` endpoints.
+See `../system_blueprint.md` for the full architecture document.
+
+## Deployment
+
+See `../railway_deployment_guide.md` for Railway deployment instructions.
+```
+
+---
+
+### 9.2 JSDoc for Utility Functions
+
+All functions in `lib/utils/` are pure and reusable across multiple components. They need JSDoc so that
+IDEs show inline documentation and future developers understand the business rules baked in.
+
+**`lib/utils/formatCurrency.ts`** — add JSDoc:
+
+```typescript
+/**
+ * Formats a number as Indian Rupee currency string.
+ *
+ * @param amount - The amount in rupees (not paise).
+ * @param options - Optional Intl.NumberFormat options override.
+ * @returns Formatted string, e.g. "₹1,23,456.00"
+ *
+ * @example
+ * formatCurrency(1234.5)  // "₹1,234.50"
+ * formatCurrency(0)       // "₹0.00"
+ */
+export function formatCurrency(amount: number, options?: Intl.NumberFormatOptions): string { ... }
+```
+
+**`lib/utils/formatDate.ts`** — add JSDoc:
+
+```typescript
+/**
+ * Formats a date string or Date object for display in the FreshLife UI.
+ *
+ * @param date - ISO 8601 string, Unix timestamp (ms), or Date object.
+ * @param format - 'short' (e.g. "6 Apr") | 'long' (e.g. "6 April 2026") | 'time' (e.g. "9:00 AM")
+ * @returns Human-readable date string in en-IN locale.
+ */
+export function formatDate(date: string | number | Date, format?: 'short' | 'long' | 'time'): string { ... }
+```
+
+**`lib/utils/imageOptimize.ts`** — add JSDoc:
+
+```typescript
+/**
+ * Resizes and compresses an image File for the Magic List upload pipeline.
+ * Gemini API limit: inline data must be < 5 MB.
+ *
+ * @param file - The raw File object from an <input type="file"> or camera capture.
+ * @param options.maxWidth - Maximum dimension in px. Default: 1568 (Gemini recommended max).
+ * @param options.maxSizeKB - Target max file size in KB. Default: 4096 (4 MB).
+ * @returns Promise resolving to { base64: string, mimeType: string, widthPx: number, heightPx: number }
+ *
+ * @example
+ * const { base64, mimeType } = await optimizeImage(file);
+ * // base64 is ready to pass to POST /api/magic-list/analyze-image
+ */
+export async function optimizeImage(
+  file: File,
+  options?: { maxWidth?: number; maxSizeKB?: number }
+): Promise<{ base64: string; mimeType: string; widthPx: number; heightPx: number }> { ... }
+```
+
+**`lib/utils/validators.ts`** — add JSDoc:
+
+```typescript
+/**
+ * Validates an Indian mobile number.
+ * Accepts 10-digit numbers with optional +91 or 0 prefix.
+ *
+ * @param phone - Raw phone string from the PhoneInput component.
+ * @returns true if valid Indian mobile number.
+ *
+ * @example
+ * isValidPhone('9876543210')   // true
+ * isValidPhone('+919876543210') // true
+ * isValidPhone('12345')         // false
+ */
+export function isValidPhone(phone: string): boolean { ... }
+
+/**
+ * Validates a 6-digit OTP string.
+ *
+ * @param otp - The OTP value from OTPInput (digits only).
+ * @returns true if exactly 6 numeric digits.
+ */
+export function isValidOTP(otp: string): boolean { ... }
+```
+
+**`lib/utils/deliveryFee.ts`** (new file — see §4.1) — add JSDoc:
+
+```typescript
+/**
+ * Calculates the delivery fee for an order.
+ *
+ * Business rules (per system_blueprint.md §7):
+ * - Express (10 min):  ₹49, free above ₹999 for members
+ * - Scheduled:         ₹29, free above ₹500 for members
+ * - Same Day:          ₹19, free above ₹500 for members
+ * - Store Pickup:      always ₹0
+ * - Minimum order:     ₹500 required for delivery
+ *
+ * @param params.subtotal      - Cart subtotal in rupees (before fee/tax).
+ * @param params.slotType      - Selected delivery slot type.
+ * @param params.isMember      - Whether the customer has an active membership plan.
+ * @param params.isStorePickup - Whether the customer chose store pickup.
+ * @returns Object with fee (₹), optional freeDeliveryMessage, and minOrderMet flag.
+ */
+export function calculateDeliveryFee(params: DeliveryFeeParams): { ... } { ... }
+```
+
+---
+
+### 9.3 JSDoc for Custom Hooks
+
+Each hook in `lib/hooks/` should have a one-paragraph description, a `@returns` note, and at least one `@example` showing how it's consumed in a component.
+
+**Pattern to follow for every hook:**
+
+```typescript
+/**
+ * [One sentence: what the hook does and why it exists]
+ *
+ * Fetches data from `POST /api/<endpoint>` via TanStack Query.
+ * All server state is cached for <N> minutes; set `staleTime` accordingly.
+ *
+ * @param [param] - [description, if the hook accepts arguments]
+ * @returns {
+ *   data:      [shape] — [description],
+ *   isLoading: boolean — true during initial fetch,
+ *   isError:   boolean — true if the request failed,
+ *   [actions]: [description of mutation functions]
+ * }
+ *
+ * @example
+ * // Inside a Server or Client component:
+ * const { data: products, isLoading } = useProducts({ category: 'fruits' });
+ */
+```
+
+Hooks requiring documentation:
+
+| Hook file | What to document |
+|-----------|-----------------|
+| `useAuth.ts` | OTP flow steps, `login()` / `logout()` return shapes, redirect behaviour |
+| `useCart.ts` | Optimistic update pattern, debounced server sync, `syncWithServer` timing |
+| `useProducts.ts` | TanStack Query key structure, `staleTime` value, search vs. category usage |
+| `useOrders.ts` | `reorder()` stock-check behaviour, pagination shape |
+| `useMagicList.ts` | State machine (`idle → analyzing → results_ready → adding_to_cart`), image size limit |
+| `useDelivery.ts` | Slot availability caching strategy, Express cutoff logic |
+| `useAddresses.ts` | Add / update / delete mutation patterns |
+| `useLocation.ts` *(new)* | Geolocation permission flow, fallback when denied |
+
+---
+
+### 9.4 JSDoc for Zustand Stores
+
+Zustand stores should have a top-level comment explaining ownership, and each action should have an inline comment explaining side-effects.
+
+**`lib/stores/cartStore.ts`:**
+
+```typescript
+/**
+ * Cart store — source of truth for all in-progress cart state.
+ *
+ * Persisted to localStorage under key `freshlife-cart`.
+ * Persisted fields: items, couponCode.
+ * Non-persisted fields: deliveryFee, lastSynced (reset on page load).
+ *
+ * Server sync: `syncWithServer()` is called with 500 ms debounce after
+ * every addItem / updateQuantity / removeItem to keep ERPNext in sync.
+ * Cart is the optimistic source — ERPNext is the canonical source.
+ *
+ * @see useMagicList — bulk adds items via addMagicListItems()
+ * @see PlaceOrderButton — reads items + couponCode before order creation
+ */
+```
+
+**`lib/stores/authStore.ts`:**
+
+```typescript
+/**
+ * Auth store — tracks OTP flow state and authenticated customer session.
+ *
+ * Persisted to localStorage under key `freshlife-auth`.
+ * Persisted fields: token, customer, isAuthenticated.
+ * Non-persisted fields: otpSent, otpPhone, otpExpiresAt (reset on page load).
+ *
+ * The `token` field mirrors the value in the HTTP-only cookie `freshlife_auth`
+ * set by `/api/auth/verify-otp`. The cookie is the authoritative auth signal
+ * for server-side middleware; the store drives client-side UI state only.
+ */
+```
+
+---
+
+### 9.5 API Route Request / Response Contracts
+
+Each `src/app/api/**/route.ts` file is missing an inline comment block describing its
+HTTP contract. This is important because the BFF routes are the only API surface exposed
+to client components.
+
+**Standard header block to add to every route file:**
+
+```typescript
+/**
+ * [METHOD] /api/[path]
+ *
+ * [One sentence description]
+ *
+ * Auth: [None | HTTP-only cookie `freshlife_auth` required]
+ *
+ * Request body / query params:
+ *   [field]: [type] — [description]
+ *
+ * Response 200:
+ *   [field]: [type] — [description]
+ *
+ * Response 4xx/5xx:
+ *   { error: string }
+ *
+ * ERPNext method: [frappe.whitelist method path or native DocType endpoint]
+ */
+```
+
+**Routes that need this contract header added (all 19 existing + 6 new):**
+
+| Route | Method | Auth | Notes |
+|-------|--------|------|-------|
+| `auth/send-otp` | POST | None | Rate-limited: 3 req / 10 min per phone |
+| `auth/verify-otp` | POST | None | Sets `freshlife_auth` HTTP-only cookie |
+| `auth/session` | GET | Cookie | Returns current customer from cookie |
+| `products/homepage` | GET | None | Cached 5 min (`s-maxage=300`) |
+| `products/category` | GET | None | `?slug=&warehouse=` query params |
+| `products/[itemCode]` | GET | None | `stale-while-revalidate=600` |
+| `products/search` | GET | None | `?q=` — rate-limited 30 req/min |
+| `cart/sync` | POST | Cookie | Optimistic — returns updated prices |
+| `cart/coupon` | POST | Cookie | Validates + returns discount amount |
+| `cart/bill` | POST | Cookie | Full bill summary including tax |
+| `delivery/slots` | GET | Cookie | `?warehouse=&date=` |
+| `delivery/pickup` | GET | Cookie | Store pickup availability |
+| `orders/create` | POST | Cookie | Creates ERPNext Sales Order |
+| `orders/confirm-payment` | POST | Cookie | Updates Sales Order payment status |
+| `orders/history` | GET | Cookie | Paginated, `?page=&limit=` |
+| `orders/reorder` | POST | Cookie | Stock-checks before re-adding to cart |
+| `magic-list/analyze-text` | POST | Cookie | Rate-limited: 10 req/hr per user |
+| `magic-list/analyze-image` | POST | Cookie | Max body size 5 MB; rate-limited 10/hr |
+| `magic-list/add-to-cart` | POST | Cookie | Bulk cart sync |
+| `payments/create-order` | POST | Cookie | Returns Razorpay `order_id` |
+| `payments/verify` | POST | Cookie | HMAC SHA-256 signature check |
+| `account/profile` | GET / PUT | Cookie | |
+| `account/addresses` | GET / POST / DELETE | Cookie | |
+| `account/refunds` | GET | Cookie | |
+| `account/support` | GET / POST | Cookie | |
+| `webhook/razorpay` | POST | None | Signature verified via `X-Razorpay-Signature` |
+| `webhook/erpnext` | POST | None | Verified via `X-Frappe-Webhook-Secret` |
+| `health` | GET | None | Returns `{ ok: true, timestamp }` |
+
+---
+
+### 9.6 Component Prop Documentation
+
+Every exported React component prop interface should have JSDoc on each field so that
+IDE tooltips surface usage guidance without opening the source file.
+
+**Pattern:**
+
+```typescript
+interface ProductCardProps {
+  /** ERPNext Item DocType `name` field — used as the unique cart key. */
+  item_code: string;
+
+  /** Display name for the product. Rendered with `--text-headline-sm`. */
+  item_name: string;
+
+  /**
+   * Selling price in rupees (after all Pricing Rules applied).
+   * Formatted with `formatCurrency()` in the PriceBlock sub-component.
+   */
+  rate: number;
+
+  /**
+   * MRP before discount. Shown as strikethrough when `rate < mrp`.
+   * Pass `undefined` to hide the MRP/discount display entirely.
+   */
+  mrp?: number;
+
+  /** CDN URL for the primary product image. Falls back to a placeholder SVG. */
+  image?: string;
+
+  /** When true, renders `<OutOfStockBadge>` and disables the Add button. */
+  in_stock: boolean;
+
+  /** `custom_freshness_category` value — if set, renders the `<FreshnessPulse>` chip. */
+  freshness_category?: string;
+}
+```
+
+**Components that require prop documentation added:**
+
+| Component | Key props to document |
+|-----------|----------------------|
+| `ProductCard` | `item_code`, `rate`, `mrp`, `in_stock`, `freshness_category` |
+| `ProductGallery` | `images[]`, `altText`, swipe behaviour note |
+| `VariantSelector` | `variants[]`, `selectedCode`, `onChange` |
+| `CartItemRow` | `item`, `onQuantityChange`, `onRemove` |
+| `DeliverySlotPicker` | `slots`, `selectedId`, `onChange`, filtering note |
+| `PlaceOrderButton` | `grandTotal`, `deliverySlot`, `isStorePickup` minimum order rule |
+| `AuthGuard` | `children`, redirect behaviour when unauthenticated |
+| `CameraCapture` | `mode` (`camera` vs `upload`), image size constraint |
+| `Modal` | `isOpen`, `onClose`, glassmorphism overlay behaviour |
+| `Toast` | `message`, `type`, auto-dismiss timing |
+| `PullToRefresh` | `onRefresh`, threshold distance, disabled on desktop |
+
+---
+
+### 9.7 TypeScript Type Documentation
+
+All types in `lib/types/` should have a top-level comment explaining what ERPNext DocType or
+external API they map to, so developers know where the shape comes from.
+
+**Pattern for each type file:**
+
+```typescript
+/**
+ * Product types — mapped from ERPNext `Item` DocType.
+ *
+ * Native fields: item_code, item_name, description, stock_uom
+ * Custom fields added by freshlife app: custom_brand_name, custom_nutritional_info,
+ *   custom_freshness_category, custom_search_keywords, custom_website_images
+ *
+ * @see backend_database_architecture.md §3 — Item DocType custom fields
+ * @see GET /api/products/[itemCode]
+ */
+
+/**
+ * Cart types — client-side only (Zustand cartStore).
+ * Not a 1:1 mapping to any ERPNext DocType;
+ * synced to ERPNext via POST /api/cart/sync.
+ */
+
+/**
+ * Order types — mapped from ERPNext `Sales Order` DocType.
+ * Custom fields: custom_razorpay_order_id, custom_payment_status,
+ *   custom_delivery_slot, custom_coupon_code, custom_delivery_fee
+ */
+
+/**
+ * Auth types — returned by POST /api/auth/verify-otp.
+ * The `token` is the ERPNext user API token stored in an HTTP-only cookie.
+ */
+
+/**
+ * Delivery types — mapped from the `Delivery Slot` Custom DocType.
+ * @see backend_database_architecture.md §4.2 — Delivery Slot DocType
+ */
+
+/**
+ * Magic List types — shapes for the AI grocery-list analysis pipeline.
+ * Input: user text or image → Gemini API → extracted items → ERPNext matching.
+ * @see system_blueprint.md §6.2 — Magic List AI flow
+ */
+
+/**
+ * Account types — mapped from ERPNext `Customer`, `Address`,
+ * `Refund Tracker`, and `Support Ticket` DocTypes.
+ */
+```
+
+---
+
+### 9.8 Documentation Summary Table
+
+| # | Artifact | Location | Status |
+|---|----------|----------|--------|
+| 9.1 | Storefront README | `storefront/README.md` | ❌ Boilerplate only |
+| 9.2 | Utility JSDoc | `lib/utils/*.ts` | ❌ No comments |
+| 9.3 | Hook JSDoc | `lib/hooks/*.ts` | ❌ No comments |
+| 9.4 | Store JSDoc | `lib/stores/*.ts` | ❌ No comments |
+| 9.5 | API route contracts | `app/api/**/route.ts` | ❌ No comments |
+| 9.6 | Component prop JSDoc | `components/**/*.tsx` | ❌ No comments |
+| 9.7 | Type file comments | `lib/types/*.ts` | ❌ No comments |
+
+> **Writing order:** 9.1 → 9.5 → 9.7 → 9.2 → 9.3 → 9.4 → 9.6
+> (README first so newcomers can onboard; API contracts before type docs so shapes are clear;
+> implementation-level JSDoc last since it requires the final code to be stable.)
+
+---
+
 > **End of Gap Analysis**
 > All items above are specified in the architecture documentation but absent from `storefront/src/`.
 > No existing files were modified — this document is additive only.
