@@ -2,10 +2,9 @@
  * Client-side delivery slot filtering utilities.
  *
  * Filters server-returned delivery slots:
- * 1. Express — available only if current time + prep window allows it
- * 2. Scheduled — hide past time windows for today
- * 3. Capacity — hide slots at max capacity (remainingCapacity === 0)
- * 4. Returns only days that still have available slots
+ * 1. Hide unavailable or fully-booked slots
+ * 2. Hide past time windows for today (compares slot endTime to current time)
+ * 3. Returns only days that still have available slots
  *
  * @see backend_database_architecture.md §4.2 — Delivery Slot DocType
  */
@@ -39,9 +38,9 @@ function parseTime(timeStr: string, baseDate: Date): Date {
 
 /**
  * Filters delivery slots based on current time:
- * 1. Express — available only if current time + 15 min prep window allows it
- * 2. Scheduled — hide past time windows for today
- * 3. Capacity — hide slots at max capacity (remainingCapacity === 0)
+ * 1. Availability — hide slots marked as unavailable
+ * 2. Capacity — hide slots at max capacity (remainingCapacity === 0)
+ * 3. Today's slots — hide past time windows for today (compares slot endTime to now)
  * 4. Returns only days that still have available slots
  */
 export function filterAvailableSlots(

@@ -6,7 +6,8 @@
  * - Scheduled:         ₹29, free above ₹500 for members
  * - Same Day:          ₹19, free above ₹500 for members
  * - Store Pickup:      always ₹0
- * - Minimum order:     ₹500 required for delivery
+ * - Minimum order:     ₹500 required for delivery (returned as `minOrderMet` flag;
+ *                      enforcement is handled at the UI layer by PlaceOrderButton)
  *
  * @param params.subtotal      - Cart subtotal in rupees (before fee/tax).
  * @param params.slotType      - Selected delivery slot type.
