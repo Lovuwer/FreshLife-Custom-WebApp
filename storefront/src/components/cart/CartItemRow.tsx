@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import type { CartItem } from '@/lib/types/cart';
 import { QuantitySelector } from '@/components/ui/QuantitySelector';
 import { formatCurrency } from '@/lib/utils/formatCurrency';
@@ -15,7 +16,14 @@ export function CartItemRow({ item }: CartItemRowProps) {
   const removeItem = useCartStore((s) => s.removeItem);
 
   return (
-    <div className={styles.row}>
+    <motion.div
+      className={styles.row}
+      layout
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20, height: 0 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+    >
       <div className={styles.imageWrap}>
         {item.image ? (
           <Image src={item.image} alt={item.item_name} fill className={styles.image} sizes="56px" />
@@ -40,6 +48,6 @@ export function CartItemRow({ item }: CartItemRowProps) {
         />
         <p className={styles.total}>{formatCurrency(item.rate * item.quantity)}</p>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -182,3 +182,14 @@
   font: var(--text-label-md);
   color: var(--color-on-surface-variant);
 }
+
+@media (min-width: 768px) {
+  .page {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .modeTabs {
+    justify-content: center;
+  }
+}

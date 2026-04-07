@@ -173,3 +173,34 @@ img {
   transform: translateY(0);
   box-shadow: var(--shadow-sm);
 }
+
+/* ============================================
+   Responsive Breakpoints
+   ============================================ */
+
+/* Tablet — 768px+ */
+@media (min-width: 768px) {
+  :root {
+    --max-content-width: 680px;
+    --header-height: 64px;
+
+    --text-display-lg: 800 3rem/1.1 var(--font-display);
+    --text-display-md: 700 2.25rem/1.15 var(--font-display);
+    --text-display-sm: 700 1.75rem/1.2 var(--font-display);
+  }
+}
+
+/* Desktop — 1024px+ */
+@media (min-width: 1024px) {
+  :root {
+    --max-content-width: 960px;
+    --bottom-nav-height: 0px;
+  }
+}
+
+/* Wide Desktop — 1280px+ */
+@media (min-width: 1280px) {
+  :root {
+    --max-content-width: 1120px;
+  }
+}

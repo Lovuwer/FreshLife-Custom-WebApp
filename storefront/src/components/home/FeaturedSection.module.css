@@ -27,3 +27,20 @@
   flex-shrink: 0;
   width: 160px;
 }
+
+@media (min-width: 768px) {
+  .cardWrap {
+    width: 180px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .scrollContainer {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  .cardWrap {
+    width: calc(25% - var(--space-sm));
+  }
+}

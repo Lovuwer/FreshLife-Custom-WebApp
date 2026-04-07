@@ -64,3 +64,20 @@
   margin: 0;
   line-height: 1.6;
 }
+
+@media (min-width: 768px) {
+  .page {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-xl);
+  }
+
+  .back {
+    width: 100%;
+  }
+
+  .info {
+    flex: 1;
+    min-width: 280px;
+  }
+}

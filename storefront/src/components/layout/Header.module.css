@@ -55,6 +55,70 @@
   white-space: nowrap;
 }
 
+@media (min-width: 768px) {
+  .locationLabel {
+    max-width: 160px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .locationLabel {
+    max-width: 240px;
+  }
+}
+
 .searchWrap {
   flex: 1;
+}
+
+.desktopNav {
+  display: none;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.desktopNavLink {
+  font: var(--text-label-md);
+  color: var(--color-on-surface-variant);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--duration-fast);
+}
+
+.desktopNavLink:hover {
+  color: var(--color-primary);
+}
+
+.desktopCartLink {
+  position: relative;
+  font-size: 1.25rem;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.desktopBadge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: var(--color-error);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
+@media (min-width: 1024px) {
+  .desktopNav {
+    display: flex;
+  }
+
+  .locationLabel {
+    max-width: 240px;
+  }
 }

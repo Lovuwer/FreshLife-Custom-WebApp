@@ -1,3 +1,5 @@
+'use client';
+import { motion } from 'framer-motion';
 import styles from './FreshnessPulse.module.css';
 
 interface FreshnessPulseProps {
@@ -15,9 +17,14 @@ export function FreshnessPulse({ category }: FreshnessPulseProps) {
   if (!label) return null;
 
   return (
-    <div className={styles.chip}>
+    <motion.div
+      className={styles.chip}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
+    >
       <span className={styles.pulse} />
       <span className={styles.label}>{label}</span>
-    </div>
+    </motion.div>
   );
 }

@@ -56,10 +56,21 @@ export default function ProductDetailPage() {
   if (isLoading) {
     return (
       <div className={styles.page}>
-        <Skeleton variant="rect" height={320} />
-        <Skeleton variant="text" height={28} />
-        <Skeleton variant="text" height={20} />
-        <Skeleton variant="rect" height={48} />
+        <Skeleton variant="text" width={60} height={16} />
+        <Skeleton variant="rect" height={320} borderRadius="var(--radius-lg)" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+          <Skeleton variant="text" width="70%" height={28} />
+          <Skeleton variant="text" width="40%" height={16} />
+          <Skeleton variant="text" width="30%" height={14} />
+        </div>
+        <Skeleton variant="rect" height={36} borderRadius="var(--radius-md)" />
+        <Skeleton variant="rect" height={48} borderRadius="var(--radius-full)" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xs)' }}>
+          <Skeleton variant="text" width="50%" height={20} />
+          <Skeleton variant="text" width="100%" height={14} />
+          <Skeleton variant="text" width="90%" height={14} />
+          <Skeleton variant="text" width="80%" height={14} />
+        </div>
       </div>
     );
   }

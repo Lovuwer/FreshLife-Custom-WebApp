@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { AnimatePresence } from 'framer-motion';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { CartItemRow } from '@/components/cart/CartItemRow';
 import { BillBreakdown } from '@/components/cart/BillBreakdown';
@@ -89,7 +90,9 @@ export default function CartPage() {
         ) : (
           <>
             <div className={styles.items}>
-              {items.map((item) => <CartItemRow key={item.item_code} item={item} />)}
+              <AnimatePresence mode="popLayout">
+                {items.map((item) => <CartItemRow key={item.item_code} item={item} />)}
+              </AnimatePresence>
             </div>
 
             <CouponInput />
