@@ -1,0 +1,32 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-md);
+  background: var(--color-surface-container-lowest);
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  color: var(--color-on-primary);
+  font: var(--text-display-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.name {
+  font: var(--text-headline-md);
+  color: var(--color-on-background);
+  margin: 0;
+}
+
+.phone {
+  font: var(--text-body-md);
+  color: var(--color-on-surface-variant);
+  margin: 0;
+}

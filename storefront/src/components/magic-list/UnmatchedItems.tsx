@@ -1,6 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
-import type { MagicListItem } from '@/lib/types/magicList';
+import type { MagicListItem } from '@/lib/types/magic-list';
 import styles from './UnmatchedItems.module.css';
 
 interface UnmatchedItemsProps {

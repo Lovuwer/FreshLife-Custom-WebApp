@@ -1,0 +1,29 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-md);
+}
+
+.textarea {
+  width: 100%;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-container-lowest);
+  border: none;
+  font: var(--text-body-md);
+  color: var(--color-on-background);
+  resize: vertical;
+  box-shadow: var(--shadow-sm);
+}
+
+.textarea:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.analyzeBtn {
+  width: 100%;
+  padding: var(--space-md);
+  font: var(--text-label-lg);
+}

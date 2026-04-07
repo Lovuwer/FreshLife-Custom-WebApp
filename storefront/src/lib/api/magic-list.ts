@@ -1,4 +1,4 @@
-import type { MagicListResult } from '@/lib/types/magicList';
+import type { MagicListResult } from '@/lib/types/magic-list';
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
