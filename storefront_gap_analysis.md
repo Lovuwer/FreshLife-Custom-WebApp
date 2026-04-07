@@ -1631,6 +1631,277 @@ external API they map to, so developers know where the shape comes from.
 
 ---
 
+---
+
+## 10. Railway Deployment Documentation
+
+The FreshLife storefront is deployed on **Railway.app** — not Vercel.
+This section documents everything that must be in place in the storefront codebase itself
+to support a Railway deployment, and cross-references `railway_deployment_guide.md` for the
+full platform-level setup.
+
+> **Full platform guide:** `railway_deployment_guide.md`
+> (covers MariaDB, Redis, ERPNext services, env variable references, troubleshooting, and pricing)
+
+---
+
+### 10.1 Required `next.config.ts` Changes
+
+Railway builds the storefront as a standalone Node.js container using **Railpack** (zero-config).
+Without `output: "standalone"`, the container will be oversized and may fail to start.
+
+**Current state:** `storefront/next.config.ts` does not include `output: "standalone"`.
+**Required state:**
+
+```typescript
+// storefront/next.config.ts
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  output: 'standalone',  // ← REQUIRED: tells Next.js to bundle only the needed files
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'erp.freshlife.app',  // ERPNext image CDN
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+```
+
+> **Why standalone?** Railway runs Next.js as a plain Node process (`node server.js`), not via
+> the Next.js dev server. The `standalone` output copies only the required dependencies into
+> `.next/standalone/`, keeping the container under ~200 MB.
+
+---
+
+### 10.2 Health Check Endpoint
+
+Railway performs HTTP health checks before marking a deployment as live.
+Without a `200 OK` health endpoint, Railway will restart the container indefinitely.
+
+**File:** `src/app/api/health/route.ts` *(missing — see §1)*
+
+```typescript
+// src/app/api/health/route.ts
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+  return NextResponse.json({ ok: true, timestamp: new Date().toISOString() });
+}
+```
+
+**Railway configuration (service → Settings → Health Check):**
+
+| Setting | Value |
+|---------|-------|
+| Path | `/api/health` |
+| Timeout | 30 s |
+| Interval | 60 s |
+
+---
+
+### 10.3 Environment Variables
+
+All secrets are set in the Railway dashboard (service → Variables tab).
+**Never commit `.env.local` to the repository.**
+
+The `.env.local.example` file (see §7) is the authoritative list of required variables.
+Below is the Railway-specific variable configuration — note how inter-service URLs
+use Railway's internal reference syntax (`${{service.VAR}}`) to avoid public internet hops.
+
+#### Storefront Service Variables
+
+| Variable | Value in Railway | Notes |
+|----------|-----------------|-------|
+| `ERPNEXT_URL` | `http://${{erpnext-app.RAILWAY_PRIVATE_DOMAIN}}:8000` | Internal network — free bandwidth, ~1 ms latency |
+| `ERPNEXT_API_KEY` | *(manual)* | Generated in ERPNext Desk → User → API Access |
+| `ERPNEXT_API_SECRET` | *(manual)* | Same as above |
+| `RAZORPAY_KEY_ID` | *(manual)* | Server-side only |
+| `RAZORPAY_KEY_SECRET` | *(manual)* | Server-side only |
+| `RAZORPAY_WEBHOOK_SECRET` | *(manual)* | Used in `api/webhook/razorpay/route.ts` |
+| `NEXT_PUBLIC_RAZORPAY_KEY_ID` | *(manual)* | Client-side — safe to expose (public key) |
+| `GEMINI_API_KEY` | *(manual)* | Server-side only — Magic List AI |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | *(manual)* | Client-side — restrict to your domain in GCP Console |
+| `MSG91_AUTH_KEY` | *(manual)* | Server-side only |
+| `MSG91_TEMPLATE_ID` | *(manual)* | Server-side only |
+| `NEXT_PUBLIC_APP_URL` | `https://www.freshlife.app` | Used for absolute URL generation |
+| `NEXT_PUBLIC_MIN_ORDER_VALUE` | `500` | Minimum cart value in rupees |
+
+> **Security note:** Variables without the `NEXT_PUBLIC_` prefix are server-side only and
+> are never included in the client bundle. All ERPNext credentials and API secrets must
+> omit the `NEXT_PUBLIC_` prefix. See `lib/api/client.ts` for the server-side fetch wrapper.
+
+---
+
+### 10.4 Custom Domain & Networking
+
+| Item | Value | Where to configure |
+|------|-------|--------------------|
+| Primary domain | `www.freshlife.app` | Railway → service → Settings → Networking → Custom Domain |
+| CNAME target | `<service-name>.railway.app` | DNS provider (Cloudflare/Route 53) |
+| ERPNext domain | `erp.freshlife.app` | Railway → `erpnext-app` service → Custom Domain |
+| Internal comms | `${{erpnext-app.RAILWAY_PRIVATE_DOMAIN}}` | Used in `ERPNEXT_URL` — bypasses public internet |
+
+**DNS record (add at your DNS provider):**
+
+```
+Type   Name    Value
+CNAME  www     <storefront-service>.railway.app
+CNAME  erp     <erpnext-service>.railway.app
+```
+
+> Railway automatically provisions TLS certificates (Let's Encrypt) for custom domains.
+> No manual certificate management is required.
+
+---
+
+### 10.5 Webhook Configuration
+
+Two webhook routes must be reachable from external services post-deployment.
+
+#### Razorpay → Storefront
+
+Configure in **Razorpay Dashboard → Settings → Webhooks**:
+
+| Setting | Value |
+|---------|-------|
+| URL | `https://www.freshlife.app/api/webhook/razorpay` |
+| Secret | Same value as `RAZORPAY_WEBHOOK_SECRET` env variable |
+| Events to subscribe | `payment.captured`, `payment.failed`, `refund.processed`, `refund.failed`, `order.paid` |
+
+The handler at `src/app/api/webhook/razorpay/route.ts` verifies the `X-Razorpay-Signature`
+header using HMAC SHA-256 before processing any event.
+
+#### ERPNext → Storefront
+
+Configure in **ERPNext Desk → Settings → Webhook**:
+
+| Setting | Value |
+|---------|-------|
+| DocType | `Sales Order` |
+| Webhook Event | `on_update` |
+| URL | `https://www.freshlife.app/api/webhook/erpnext` |
+| Header | `X-Frappe-Webhook-Secret: <ERPNEXT_WEBHOOK_SECRET>` |
+
+The handler at `src/app/api/webhook/erpnext/route.ts` (missing — see §1.6) verifies this header.
+
+---
+
+### 10.6 Deployment Checklist
+
+Use this checklist before every production deploy:
+
+```
+Pre-deploy
+  [ ] next.config.ts has output: "standalone"
+  [ ] All env variables set in Railway dashboard (no placeholder values)
+  [ ] ERPNEXT_URL points to internal Railway domain (not the public erp.freshlife.app URL)
+  [ ] NEXT_PUBLIC_GOOGLE_MAPS_API_KEY restricted to www.freshlife.app in GCP Console
+  [ ] Razorpay keys are live keys (not test keys)
+
+Code
+  [ ] npm run build passes locally (cd storefront && npm run build)
+  [ ] npx tsc --noEmit reports 0 errors
+  [ ] api/health/route.ts exists and returns 200
+
+Railway dashboard
+  [ ] Health check path set to /api/health
+  [ ] Custom domain www.freshlife.app attached with valid TLS
+  [ ] ERPNext service has persistent volume on /home/frappe/frappe-bench/sites
+  [ ] Razorpay webhook URL updated if domain changed
+
+Post-deploy
+  [ ] GET https://www.freshlife.app/api/health → { ok: true }
+  [ ] Login flow (OTP) works end-to-end
+  [ ] Add-to-cart and checkout flow works end-to-end
+  [ ] Test Razorpay webhook: send a test event from Razorpay dashboard
+```
+
+---
+
+### 10.7 CI/CD with GitHub Actions (optional)
+
+Railway auto-deploys on every push to the connected GitHub branch.
+To add a build + type-check gate before Railway picks up the commit, create
+`.github/workflows/ci.yml`:
+
+```yaml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: storefront
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: storefront/package-lock.json
+
+      - run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+        env:
+          # Provide dummy values so the build doesn't fail on missing env vars
+          ERPNEXT_URL: http://localhost:8000
+          ERPNEXT_API_KEY: ci
+          ERPNEXT_API_SECRET: ci
+          RAZORPAY_KEY_ID: rzp_test_ci
+          RAZORPAY_KEY_SECRET: ci
+          RAZORPAY_WEBHOOK_SECRET: ci
+          NEXT_PUBLIC_RAZORPAY_KEY_ID: rzp_test_ci
+          GEMINI_API_KEY: ci
+          NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ci
+          MSG91_AUTH_KEY: ci
+          MSG91_TEMPLATE_ID: ci
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+          NEXT_PUBLIC_MIN_ORDER_VALUE: "500"
+```
+
+> Railway will still auto-deploy after the workflow passes. If you want Railway to deploy
+> **only** on CI success, enable **"Wait for CI"** in Railway → project → Settings → Deploy.
+
+---
+
+### 10.8 Railway Deployment Summary
+
+| Item | Status | Action required |
+|------|--------|----------------|
+| `next.config.ts` `output: "standalone"` | ❌ Missing | Add to `storefront/next.config.ts` |
+| `api/health/route.ts` | ❌ Missing | Create (see §10.2) |
+| `.env.local.example` | ❌ Missing | Create (see §7) |
+| Railway health check path | ❌ Not configured | Set `/api/health` in Railway dashboard |
+| Razorpay webhook | ❌ Not configured | Set URL + events in Razorpay dashboard |
+| ERPNext webhook | ❌ Not configured | Set URL + secret in ERPNext Desk |
+| `api/webhook/erpnext/route.ts` | ❌ Missing | Create (see §1.6) |
+| Custom domain DNS | ⚠️ Verify | Confirm CNAME records are live |
+| GitHub Actions CI | ⚠️ Optional | Add `.github/workflows/ci.yml` |
+
+> **Full Railway platform setup** (MariaDB, Redis, ERPNext services, volumes, pricing):
+> see `railway_deployment_guide.md`
+
+---
+
 > **End of Gap Analysis**
 > All items above are specified in the architecture documentation but absent from `storefront/src/`.
 > No existing files were modified — this document is additive only.
