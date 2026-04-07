@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import { useProductDetail } from '@/lib/hooks/useProducts';
 import { useCartStore } from '@/lib/stores/cartStore';
 import { useLocationStore } from '@/lib/stores/locationStore';
@@ -17,6 +16,7 @@ import styles from './page.module.css';
 
 export default function ProductDetailPage() {
   const params = useParams<{ itemCode: string }>();
+  const router = useRouter();
   const itemCode = decodeURIComponent(params.itemCode);
   const { currentLocation } = useLocationStore();
 
@@ -79,7 +79,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className={styles.page}>
-      <Link href="javascript:history.back()" className={styles.back}>← Back</Link>
+      <button onClick={() => router.back()} className={styles.back}>← Back</button>
 
       <ProductGallery images={product.images} productName={product.item_name} />
 

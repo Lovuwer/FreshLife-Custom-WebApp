@@ -8,6 +8,7 @@ import { MatchedItemsList } from '@/components/magic-list/MatchedItemsList';
 import { UnmatchedItems } from '@/components/magic-list/UnmatchedItems';
 import { AddAllToCart } from '@/components/magic-list/AddAllToCart';
 import { useMagicList } from '@/lib/hooks/useMagicList';
+import { useUIStore } from '@/lib/stores/uiStore';
 import styles from './page.module.css';
 
 type InputMode = 'text' | 'photo' | 'upload';
@@ -17,6 +18,7 @@ export default function MagicListPage() {
   const [text, setText] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const addToast = useUIStore((s) => s.addToast);
   const [cameraActive, setCameraActive] = useState(false);
 
   const {
@@ -59,9 +61,9 @@ export default function MagicListPage() {
         setCameraActive(true);
       }
     } catch {
-      // Camera permission denied
+      addToast('Camera permission denied. Please allow camera access in your browser settings.', 'error');
     }
-  }, []);
+  }, [addToast]);
 
   const capturePhoto = useCallback(() => {
     if (!videoRef.current) return;

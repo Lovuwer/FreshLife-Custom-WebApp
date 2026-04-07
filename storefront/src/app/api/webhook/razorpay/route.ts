@@ -44,8 +44,9 @@ export async function POST(request: NextRequest) {
     );
 
     return NextResponse.json({ status: 'ok' });
-  } catch {
-    // Always return 200 to Razorpay to prevent retries for processing errors
+  } catch (error) {
+    // Log for debugging — return 200 to Razorpay to prevent retries for processing errors
+    console.error('[Razorpay Webhook] Processing error:', error instanceof Error ? error.message : error);
     return NextResponse.json({ status: 'received' }, { status: 200 });
   }
 }

@@ -30,7 +30,7 @@ export function OTPInput({
     if (digit && index < length - 1) {
       inputRefs.current[index + 1]?.focus();
     }
-    if (newValue.length === length && !newValue.includes('')) {
+    if (newValue.length === length) {
       onComplete?.(newValue);
     }
   };
