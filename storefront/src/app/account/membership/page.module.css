@@ -1,0 +1,79 @@
+.page {
+  min-height: 100vh;
+  background: var(--color-surface);
+  padding-bottom: calc(var(--bottom-nav-height) + var(--space-lg));
+}
+
+.header {
+  padding: var(--space-lg) var(--space-md) var(--space-md);
+  background: var(--color-surface-container-lowest);
+}
+
+.title {
+  font: var(--text-display-sm);
+  color: var(--color-on-background);
+  margin: 0;
+}
+
+.currentPlan {
+  padding: var(--space-lg) var(--space-md);
+  background: var(--gradient-primary);
+  color: var(--color-on-primary);
+}
+
+.planLabel {
+  font: var(--text-body-md);
+  margin: 0 0 var(--space-xs);
+  opacity: 0.85;
+}
+
+.planName {
+  font: var(--text-display-md);
+  margin: 0;
+}
+
+.plans {
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.planCard {
+  background: var(--color-surface-container-lowest);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.planBadge {
+  font: var(--text-headline-sm);
+  color: var(--color-primary);
+}
+
+.benefits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.benefits li {
+  font: var(--text-body-md);
+  color: var(--color-on-background);
+  padding-left: var(--space-md);
+  position: relative;
+}
+
+.benefits li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-weight: 700;
+}

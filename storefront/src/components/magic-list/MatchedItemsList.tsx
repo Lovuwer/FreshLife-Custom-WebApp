@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import type { MagicListItem } from '@/lib/types/magicList';
+import type { MagicListItem } from '@/lib/types/magic-list';
 import { formatCurrency } from '@/lib/utils/formatCurrency';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';

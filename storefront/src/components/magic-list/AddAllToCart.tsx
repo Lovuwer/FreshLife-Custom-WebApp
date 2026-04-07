@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
-import type { MagicListResult } from '@/lib/types/magicList';
+import type { MagicListResult } from '@/lib/types/magic-list';
 import { formatCurrency } from '@/lib/utils/formatCurrency';
 import styles from './AddAllToCart.module.css';
 

@@ -1,9 +1,9 @@
 'use client';
 import { useState, useCallback } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { analyzeText, analyzeImage } from '@/lib/api/magicList';
+import { analyzeText, analyzeImage } from '@/lib/api/magic-list';
 import { useCartStore } from '@/lib/stores/cartStore';
-import type { MagicListResult, MagicListItem } from '@/lib/types/magicList';
+import type { MagicListResult, MagicListItem } from '@/lib/types/magic-list';
 
 export function useMagicList() {
   const addItem = useCartStore((s) => s.addItem);
