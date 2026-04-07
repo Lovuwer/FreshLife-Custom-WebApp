@@ -272,7 +272,7 @@ RUN bench get-app erpnext --branch version-15
 
 # Install custom FreshLife app
 # Replace with YOUR GitHub org/user URL:
-RUN bench get-app freshlife https://github.com/Lovuwer/FreshLife-Custom-WebApp.git
+RUN bench get-app freshlife https://github.com/Lovuwer/FreshLife-Custom-WebApp.git --resolve-deps
 
 # Install Supervisor for multi-process management in a single container
 USER root
