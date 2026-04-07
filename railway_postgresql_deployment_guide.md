@@ -385,7 +385,7 @@ RUN bench get-app erpnext --branch version-15
 
 # Install your custom FreshLife Frappe app
 # Replace with your actual repo URL
-RUN bench get-app freshlife https://github.com/your-org/freshlife-frappe-app.git
+RUN bench get-app freshlife https://github.com/your-org/freshlife-frappe-app.git --resolve-deps
 
 # Supervisor for multi-process management
 USER root
